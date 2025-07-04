@@ -29,9 +29,34 @@ $apis = [
         'controller' => 'ArticleController',
         'method' => 'updateArticle'
     ],
+
+    '/category' => [
+        'controller' => 'CategoryController',
+        'method' => 'getCategoryById'
+    ],
+    '/categories' => [
+        'controller' => 'CategoryController',
+        'method' => 'getAllCategories'
+    ],
+    '/create_category' => [
+        'controller' => 'CategoryController',
+        'method' => 'createCategory'
+    ],
+    // '/update_category' => [
+    //     'controller' => 'CategoryController',
+    //     'method' => 'updateCategory'
+    // ],
+    // '/delete_category' => [
+    //     'controller' => 'CategoryController',
+    //     'method' => 'deleteCategoryById'
+    // ],
+    // '/delete_categories' => [
+    //     'controller' => 'CategoryController',
+    //     'method' => 'deleteAllCategories'
+    // ],
 ];
 
-function initApi(string $request)
+function runApi(string $request)
 {
     global $apis;
     if (isset($apis[$request])) {

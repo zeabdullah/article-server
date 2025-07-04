@@ -128,7 +128,4 @@ class ArticleController
 
 //To-Do:
 
-//1- Try/Catch in controllers ONLY!!! 
-//2- Find a way to remove the hard coded response code (from ResponseService.php)
-//3- Include the routes file (api.php) in the (index.php) -- In other words, seperate the routing from the index (which is the engine)
 //4- Create a BaseController and clean some imports 

@@ -20,4 +20,4 @@ if ($request == '') {
     $request = '/';
 }
 
-initApi($request);
+runApi($request);
