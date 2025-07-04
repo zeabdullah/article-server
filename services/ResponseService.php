@@ -19,7 +19,16 @@ class ResponseService
         ]);
     }
 
-    /** Responds with status `404 Created` */
+    /** Responds with status `400 Bad Request` */
+    public static function badRequest($payload)
+    {
+        return json_encode([
+            'status' => 400,
+            'payload' => $payload
+        ]);
+    }
+
+    /** Responds with status `404 Not Found` */
     public static function notFound($payload)
     {
         return json_encode([

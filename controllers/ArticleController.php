@@ -16,12 +16,10 @@ class ArticleController
         echo ResponseService::created($article->toArray());
     }
 
-    public function getAllArticles()
+    public function getArticleById()
     {
         if (!isset($_GET["id"]) || $_GET['id'] === '') {
-            $articles = Article::all();
-            $articles_array = ArticleService::articlesToArray($articles);
-            echo ResponseService::ok($articles_array);
+            echo ResponseService::badRequest('param `id` is required');
             return;
         }
 
@@ -34,6 +32,12 @@ class ArticleController
         } else {
             echo ResponseService::notFound("Article of id `$id` not found");
         }
+    }
+    public function getAllArticles()
+    {
+        $articles = Article::all();
+        $articles_array = ArticleService::articlesToArray($articles);
+        echo ResponseService::ok($articles_array);
     }
 
     public function deleteAllArticles()

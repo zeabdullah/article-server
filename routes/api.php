@@ -9,6 +9,10 @@ $apis = [
         'controller' => 'ArticleController',
         'method' => 'createArticle'
     ],
+    '/article' => [
+        'controller' => 'ArticleController',
+        'method' => 'getArticleById'
+    ],
     '/articles' => [
         'controller' => 'ArticleController',
         'method' => 'getAllArticles'
