@@ -1,6 +1,6 @@
 <?php
-require_once('../connection/connection.php');
-require_once('../helpers/helpers.php');
+require_once(__DIR__ . '/../connection/connection.php');
+require_once(__DIR__ . '/../helpers/helpers.php');
 
 abstract class Model
 {
@@ -14,8 +14,9 @@ abstract class Model
         $this->id = $data['id'] ?? -1;
     }
 
-    public static function find(mysqli $mysqli, int $id)
+    public static function find(int $id)
     {
+        global $mysqli;
         $sql = sprintf(
             "SELECT * FROM %s WHERE %s = ?",
             static::$table,
@@ -31,8 +32,9 @@ abstract class Model
         return $data ? new static($data) : null;
     }
 
-    public static function all(mysqli $mysqli)
+    public static function all()
     {
+        global $mysqli;
         $sql = sprintf("SELECT * FROM %s", static::$table);
 
         $query = $mysqli->prepare($sql);
@@ -86,6 +88,8 @@ abstract class Model
 
         return $query->insert_id;
     }
+
+    abstract public function toArray();
 
     //you have to continue with the same mindset
     //Find a solution for sending the $mysqli everytime... 
