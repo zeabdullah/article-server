@@ -82,4 +82,45 @@ class CategoryController
             ]);
         }
     }
+
+    public function deleteAllCategories()
+    {
+        try {
+            $success = Category::deleteAll();
+            echo $success ?
+                ResponseService::ok("Deleted all categories successfully.")
+                : ResponseService::internalErr("Deleting categories unsuccessful. Something went wrong from our side.");
+        } catch (\Throwable $th) {
+            echo ResponseService::badRequest([
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+    public function deleteCategoryById()
+    {
+        try {
+            if (!isset($_GET['id']) || $_GET['id'] === '') {
+                echo ResponseService::badRequest("param `id` is required");
+                return;
+            }
+
+            $id = (int) $_GET['id'];
+            $cat = Category::find($id);
+
+            if (!isset($cat)) {
+                echo ResponseService::notFound("Category of id `$id` not found");
+                return;
+            }
+
+            $success = Category::deleteById($id);
+            echo $success ?
+                ResponseService::ok("Deleted category of id `$id` successfully.")
+                : ResponseService::internalErr("Deleting category unsuccessful. Something went wrong from our side.");
+        } catch (\Throwable $th) {
+            echo ResponseService::internalErr([
+                'message' => $th->getMessage(),
+            ]);
+        }
+    }
 }

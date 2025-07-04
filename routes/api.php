@@ -46,14 +46,14 @@ $apis = [
         'controller' => 'CategoryController',
         'method' => 'updateCategory'
     ],
-    // '/delete_category' => [
-    //     'controller' => 'CategoryController',
-    //     'method' => 'deleteCategoryById'
-    // ],
-    // '/delete_categories' => [
-    //     'controller' => 'CategoryController',
-    //     'method' => 'deleteAllCategories'
-    // ],
+    '/delete_category' => [
+        'controller' => 'CategoryController',
+        'method' => 'deleteCategoryById'
+    ],
+    '/delete_categories' => [
+        'controller' => 'CategoryController',
+        'method' => 'deleteAllCategories'
+    ],
 ];
 
 function runApi(string $request)
