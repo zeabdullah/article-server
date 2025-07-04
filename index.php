@@ -1,6 +1,8 @@
 <?php
-require_once(__DIR__ . '/helpers/headers.php');
-require(__DIR__ . '/routes/api.php');
+declare(strict_types=1);
+
+require_once __DIR__ . '/helpers/headers.php';
+require_once __DIR__ . '/routes/api.php';
 
 // This block is used to extract the route name from the URL
 //----------------------------------------------------------

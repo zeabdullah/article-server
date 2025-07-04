@@ -115,15 +115,31 @@ abstract class Model
         $sql = sprintf(
             "DELETE FROM %s WHERE 1",
             static::$table,
-            static::$primary_key
         );
         return $db->prepare($sql)->execute();
     }
 
 
-    public function update()
+    public function update(array $data)
     {
-        // TODO
+        $db = Database::getInstance();
+
+        $commaSeparatedSetParams = implode(',', array_fill(0, count($data), '%s=?'));
+        $formattedCommaSeparatedSetParams = sprintf(
+            $commaSeparatedSetParams,
+            ...array_keys($data)
+        );
+
+        $sql = sprintf(
+            "UPDATE %s
+            SET %s
+            WHERE %s = ?",
+            static::$table,
+            $formattedCommaSeparatedSetParams,
+            static::$primary_key
+        );
+
+        return $db->prepare($sql)->execute([...array_values($data), $this->id]);
     }
 
     abstract public function toArray();
