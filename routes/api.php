@@ -25,6 +25,10 @@ $apis = [
         'controller' => 'ArticleController',
         'method' => 'deleteAllArticles'
     ],
+    '/update_article' => [
+        'controller' => 'ArticleController',
+        'method' => 'updateArticle'
+    ],
 ];
 
 function initApi(string $request)

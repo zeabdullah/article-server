@@ -25,12 +25,12 @@ class ArticleController
     public function getArticleById()
     {
         try {
-            if (!isset($_GET["id"]) || $_GET['id'] === '') {
+            if (!isset($_GET['id']) || $_GET['id'] === '') {
                 echo ResponseService::badRequest("param `id` is required");
                 return;
             }
 
-            $id = $_GET["id"];
+            $id = (int) $_GET['id'];
             $article = Article::find($id);
             if (!isset($article)) {
                 echo ResponseService::notFound("Article of id `$id` not found");
@@ -73,12 +73,12 @@ class ArticleController
     public function deleteArticleById()
     {
         try {
-            if (!isset($_GET["id"]) || $_GET['id'] === '') {
+            if (!isset($_GET['id']) || $_GET['id'] === '') {
                 echo ResponseService::badRequest("param `id` is required");
                 return;
             }
 
-            $id = $_GET['id'];
+            $id = (int) $_GET['id'];
             $article = Article::find($id);
 
             if (!isset($article)) {
@@ -89,7 +89,35 @@ class ArticleController
             $success = Article::deleteById($id);
             echo $success ?
                 ResponseService::ok("Deleted article of id `$id` successfully.")
-                : ResponseService::internalErr("Deleting articles unsuccessful. Something went wrong from our side.");
+                : ResponseService::internalErr("Deleting article unsuccessful. Something went wrong from our side.");
+        } catch (\Throwable $th) {
+            echo ResponseService::internalErr([
+                'message' => $th->getMessage(),
+            ]);
+        }
+    }
+
+    public function updateArticle(object $json)
+    {
+        try {
+            if (!isset($_GET["id"]) || $_GET['id'] === '') {
+                echo ResponseService::badRequest("param `id` is required");
+                return;
+            }
+
+            $id = (int) $_GET['id'];
+            $article = Article::find($id);
+
+            if (!isset($article)) {
+                echo ResponseService::notFound("Article of id `$id` not found");
+                return;
+            }
+
+            $success = $article->update(get_object_vars($json));
+
+            echo $success ?
+                ResponseService::ok("Updated article of id `$id` successfully.")
+                : ResponseService::internalErr("Update article unsuccessful. Something went wrong from our side.");
         } catch (\Throwable $th) {
             echo ResponseService::internalErr([
                 'message' => $th->getMessage(),
