@@ -1,8 +1,9 @@
 <?php
+require_once(__DIR__ . '/../helpers/helpers.php');
+
 //Routing starts here (Mapping between the request and the controller & method names)
 //It's an key-value array where the value is an key-value array
 //----------------------------------------------------------
-
 $apis = [
     '/create_article' => [
         'controller' => 'ArticleController',
@@ -24,7 +25,7 @@ function initApi(string $request)
     if (isset($apis[$request])) {
         $controller_name = $apis[$request]['controller']; //if $request == /articles, then the $controller_name will be "ArticleController" 
         $method = $apis[$request]['method'];
-        require_once "controllers/{$controller_name}.php";
+        require_once __DIR__ . "/../controllers/{$controller_name}.php";
 
         $controller = new $controller_name();
 

@@ -16,14 +16,15 @@ abstract class Model
 
     public static function find(int $id)
     {
-        global $mysqli;
+        $db = Database::getInstance();
+
         $sql = sprintf(
             "SELECT * FROM %s WHERE %s = ?",
             static::$table,
             static::$primary_key
         );
 
-        $query = $mysqli->prepare($sql);
+        $query = $db->prepare($sql);
         $query->bind_param("i", $id);
         $query->execute();
 
@@ -34,10 +35,10 @@ abstract class Model
 
     public static function all()
     {
-        global $mysqli;
+        $db = Database::getInstance();
         $sql = sprintf("SELECT * FROM %s", static::$table);
 
-        $query = $mysqli->prepare($sql);
+        $query = $db->prepare($sql);
         $query->execute();
 
         $data = $query->get_result();
@@ -72,9 +73,9 @@ abstract class Model
 
     private static function insert(array $data)
     {
-        global $mysqli;
-
+        $db = Database::getInstance();
         [$joinedCols, $placeholders] = getJoinedSqlStrings($data);
+        
         $sql =
             sprintf(
                 "INSERT INTO %s (%s) values (%s)",
@@ -83,7 +84,7 @@ abstract class Model
                 $placeholders
             );
 
-        $query = $mysqli->prepare($sql);
+        $query = $db->prepare($sql);
         $query->execute(array_values($data));
 
         return $query->insert_id;

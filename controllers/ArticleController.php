@@ -1,29 +1,43 @@
-<?php 
+<?php
 
 require(__DIR__ . "/../models/Article.php");
-require(__DIR__ . "/../connection/connection.php");
 require(__DIR__ . "/../services/ArticleService.php");
 require(__DIR__ . "/../services/ResponseService.php");
 
-class ArticleController{
-    
-    public function getAllArticles(){
-        global $mysqli;
+class ArticleController
+{
+    public function createArticle(object $json)
+    {
+        $article = Article::create([
+            'name' => $json->name,
+            'author' => $json->author,
+            'description' => $json->description,
+        ]);
+        echo ResponseService::created($article->toArray());
+    }
 
-        if(!isset($_GET["id"])){
-            $articles = Article::all($mysqli);
-            $articles_array = ArticleService::articlesToArray($articles); 
-            echo ResponseService::success_response($articles_array);
+    public function getAllArticles()
+    {
+        if (!isset($_GET["id"]) || $_GET['id'] === '') {
+            $articles = Article::all();
+            $articles_array = ArticleService::articlesToArray($articles);
+            echo ResponseService::ok($articles_array);
             return;
         }
 
         $id = $_GET["id"];
-        $article = Article::find($mysqli, $id)->toArray();
-        echo ResponseService::success_response($article);
-        return;
+        $article = Article::find($id);
+
+        if (isset($article)) {
+            $article = $article->toArray();
+            echo ResponseService::ok($article);
+        } else {
+            echo ResponseService::notFound("Article of id `$id` not found");
+        }
     }
 
-    public function deleteAllArticles(){
+    public function deleteAllArticles()
+    {
         die("Deleting...");
     }
 }
