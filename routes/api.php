@@ -17,6 +17,10 @@ $apis = [
         'controller' => 'ArticleController',
         'method' => 'getAllArticles'
     ],
+    '/delete_article' => [
+        'controller' => 'ArticleController',
+        'method' => 'deleteArticleById'
+    ],
     '/delete_articles' => [
         'controller' => 'ArticleController',
         'method' => 'deleteAllArticles'

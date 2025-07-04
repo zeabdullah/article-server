@@ -8,41 +8,93 @@ class ArticleController
 {
     public function createArticle(object $json)
     {
-        $article = Article::create([
-            'name' => $json->name,
-            'author' => $json->author,
-            'description' => $json->description,
-        ]);
-        echo ResponseService::created($article->toArray());
+        try {
+            $article = Article::create([
+                'name' => $json->name,
+                'author' => $json->author,
+                'description' => $json->description,
+            ]);
+            echo ResponseService::created($article->toArray());
+        } catch (\Throwable $th) {
+            echo ResponseService::internalErr([
+                'message' => $th->getMessage(),
+            ]);
+        }
     }
 
     public function getArticleById()
     {
-        if (!isset($_GET["id"]) || $_GET['id'] === '') {
-            echo ResponseService::badRequest('param `id` is required');
-            return;
-        }
+        try {
+            if (!isset($_GET["id"]) || $_GET['id'] === '') {
+                echo ResponseService::badRequest("param `id` is required");
+                return;
+            }
 
-        $id = $_GET["id"];
-        $article = Article::find($id);
-
-        if (isset($article)) {
+            $id = $_GET["id"];
+            $article = Article::find($id);
+            if (!isset($article)) {
+                echo ResponseService::notFound("Article of id `$id` not found");
+                return;
+            }
             $article = $article->toArray();
             echo ResponseService::ok($article);
-        } else {
-            echo ResponseService::notFound("Article of id `$id` not found");
+        } catch (\Throwable $th) {
+            echo ResponseService::internalErr([
+                'message' => $th->getMessage(),
+            ]);
         }
     }
     public function getAllArticles()
     {
-        $articles = Article::all();
-        $articles_array = ArticleService::articlesToArray($articles);
-        echo ResponseService::ok($articles_array);
+        try {
+            $articles = Article::all();
+            $articles_array = ArticleService::articlesToArray($articles);
+            echo ResponseService::ok($articles_array);
+        } catch (\Throwable $th) {
+            echo ResponseService::internalErr([
+                'message' => $th->getMessage(),
+            ]);
+        }
     }
 
     public function deleteAllArticles()
     {
-        die("Deleting...");
+        try {
+            $success = Article::deleteAll();
+            echo $success ?
+                ResponseService::ok("Deleted all articles successfully.")
+                : ResponseService::internalErr("Deleting articles unsuccessful. Something went wrong from our side.");
+        } catch (\Throwable $th) {
+            echo ResponseService::badRequest([
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+    public function deleteArticleById()
+    {
+        try {
+            if (!isset($_GET["id"]) || $_GET['id'] === '') {
+                echo ResponseService::badRequest("param `id` is required");
+                return;
+            }
+
+            $id = $_GET['id'];
+            $article = Article::find($id);
+
+            if (!isset($article)) {
+                echo ResponseService::notFound("Article of id `$id` not found");
+                return;
+            }
+
+            $success = Article::deleteById($id);
+            echo $success ?
+                ResponseService::ok("Deleted article of id `$id` successfully.")
+                : ResponseService::internalErr("Deleting articles unsuccessful. Something went wrong from our side.");
+        } catch (\Throwable $th) {
+            echo ResponseService::internalErr([
+                'message' => $th->getMessage(),
+            ]);
+        }
     }
 }
 

@@ -75,7 +75,7 @@ abstract class Model
     {
         $db = Database::getInstance();
         [$joinedCols, $placeholders] = getJoinedSqlStrings($data);
-        
+
         $sql =
             sprintf(
                 "INSERT INTO %s (%s) values (%s)",
@@ -88,6 +88,42 @@ abstract class Model
         $query->execute(array_values($data));
 
         return $query->insert_id;
+    }
+
+    public static function deleteById(string $id)
+    {
+        $db = Database::getInstance();
+        $sql = sprintf(
+            "DELETE FROM %s WHERE %s = ?",
+            static::$table,
+            static::$primary_key
+        );
+        return $db->prepare($sql)->execute([$id]);
+    }
+
+    public function delete()
+    {
+        if ($this->id === -1) {
+            return false;
+        }
+        return static::deleteById($this->id);
+    }
+
+    public static function deleteAll()
+    {
+        $db = Database::getInstance();
+        $sql = sprintf(
+            "DELETE FROM %s WHERE 1",
+            static::$table,
+            static::$primary_key
+        );
+        return $db->prepare($sql)->execute();
+    }
+
+
+    public function update()
+    {
+        // TODO
     }
 
     abstract public function toArray();
