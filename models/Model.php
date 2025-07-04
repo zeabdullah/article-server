@@ -74,7 +74,7 @@ abstract class Model
     private static function insert(array $data)
     {
         $db = Database::getInstance();
-        [$joinedCols, $placeholders] = getJoinedSqlStrings($data);
+        [$joinedCols, $placeholders] = getJoinedSqlINSERTStrings($data);
 
         $sql =
             sprintf(
