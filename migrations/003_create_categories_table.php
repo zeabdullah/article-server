@@ -6,6 +6,6 @@ $sql = "CREATE TABLE categories(
     name VARCHAR(255) NOT NULL
 )";
 
-$mysqli->prepare($sql)->execute();
+Database::getInstance()->prepare($sql)->execute();
 
-echo 'migration done!';
+echo 'migration 003 done!';

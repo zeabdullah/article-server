@@ -8,5 +8,5 @@ $query = "CREATE TABLE articles(
           author VARCHAR(255) NOT NULL, 
           description TEXT NOT NULL)";
 
-$execute = $mysqli->prepare($query);
+$execute = Database::getInstance()->prepare($query);
 $execute->execute();

@@ -7,6 +7,7 @@ class Article extends Model
     private string $name;
     private string $author;
     private string $description;
+    private string $categoryId;
 
     protected static string $table = "articles";
 

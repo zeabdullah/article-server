@@ -130,6 +130,7 @@ abstract class Model
             ...array_keys($data)
         );
 
+        // This is prone to SQL injection at the SET statement, due to me unable to using the `?` in place of column names.
         $sql = sprintf(
             "UPDATE %s
             SET %s
@@ -143,13 +144,6 @@ abstract class Model
     }
 
     abstract public function toArray();
-
-    //you have to continue with the same mindset
-    //Find a solution for sending the $mysqli everytime... 
-    //Implement the following: 
-    //1- update() -> non-static function 
-    //2- create() -> static function
-    //3- delete() -> static function 
 }
 
 
