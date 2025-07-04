@@ -14,3 +14,8 @@ function getJoinedSqlStrings(array $dataAssoc)
 
     return [$joinedCols, $joinedValuePlaceholders];
 }
+
+function getRequestBodyAsJson()
+{
+    return json_decode(file_get_contents('php://input'));
+}
