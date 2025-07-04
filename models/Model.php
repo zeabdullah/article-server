@@ -1,14 +1,27 @@
-<?php 
-abstract class Model{
+<?php
+require_once('../connection/connection.php');
+require_once('../helpers/helpers.php');
 
+abstract class Model
+{
     protected static string $table;
     protected static string $primary_key = "id";
 
-    public static function find(mysqli $mysqli, int $id){
-        $sql = sprintf("Select * from %s WHERE %s = ?", 
-                        static::$table, 
-                        static::$primary_key);
-        
+    protected int $id;
+
+    public function __construct(array $data)
+    {
+        $this->id = $data['id'] ?? -1;
+    }
+
+    public static function find(mysqli $mysqli, int $id)
+    {
+        $sql = sprintf(
+            "SELECT * FROM %s WHERE %s = ?",
+            static::$table,
+            static::$primary_key
+        );
+
         $query = $mysqli->prepare($sql);
         $query->bind_param("i", $id);
         $query->execute();
@@ -18,20 +31,60 @@ abstract class Model{
         return $data ? new static($data) : null;
     }
 
-    public static function all(mysqli $mysqli){
-        $sql = sprintf("Select * from %s", static::$table);
-        
+    public static function all(mysqli $mysqli)
+    {
+        $sql = sprintf("SELECT * FROM %s", static::$table);
+
         $query = $mysqli->prepare($sql);
         $query->execute();
 
         $data = $query->get_result();
 
         $objects = [];
-        while($row = $data->fetch_assoc()){
-            $objects[] = new static($row); //creating an object of type "static" / "parent" and adding the object to the array
+        while ($row = $data->fetch_assoc()) {
+            $objects[] = new static($row);
         }
 
-        return $objects; //we are returning an array of objects!!!!!!!!
+        return $objects;
+    }
+
+    public function save(): bool
+    {
+        if ($this->id === -1) {
+            return false;
+        }
+
+        $data = $this->toArray();
+        unset($data['id']); // to prevent db insertion with ID '-1'
+
+        $this->id = static::insert($data);
+
+        return true;
+    }
+
+    public static function create(array $data)
+    {
+        $data['id'] = static::insert($data);
+        return new static($data);
+    }
+
+    private static function insert(array $data)
+    {
+        global $mysqli;
+
+        [$joinedCols, $placeholders] = getJoinedSqlStrings($data);
+        $sql =
+            sprintf(
+                "INSERT INTO %s (%s) values (%s)",
+                static::$table,
+                $joinedCols,
+                $placeholders
+            );
+
+        $query = $mysqli->prepare($sql);
+        $query->execute(array_values($data));
+
+        return $query->insert_id;
     }
 
     //you have to continue with the same mindset
