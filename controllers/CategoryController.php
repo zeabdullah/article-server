@@ -41,6 +41,7 @@ class CategoryController
             ]);
         }
     }
+
     public function createcategory(object $json)
     {
         try {
@@ -53,32 +54,32 @@ class CategoryController
         }
     }
 
-    // public function updatecategory(object $json)
-    // {
-    //     try {
-    //         if (!isset($_GET["id"]) || $_GET['id'] === '') {
-    //             echo ResponseService::badRequest("param `id` is required");
-    //             return;
-    //         }
+    public function updatecategory(object $json)
+    {
+        try {
+            if (!isset($_GET["id"]) || $_GET['id'] === '') {
+                echo ResponseService::badRequest("param `id` is required");
+                return;
+            }
 
-    //         $id = (int) $_GET['id'];
-    //         $cat = Category::find($id);
+            $id = (int) $_GET['id'];
+            $cat = Category::find($id);
 
-    //         if (!isset($cat)) {
-    //             echo ResponseService::notFound("Category of id `$id` not found");
-    //             return;
-    //         }
+            if (!isset($cat)) {
+                echo ResponseService::notFound("Category of id `$id` not found");
+                return;
+            }
 
-    //         // This JSON should be validated of course... but it'll pass for now.
-    //         $success = $cat->update(get_object_vars($json));
+            // This JSON should be validated of course... but it'll pass for now.
+            $success = $cat->update(get_object_vars($json));
 
-    //         echo $success ?
-    //             ResponseService::ok("Updated category of id `$id` successfully.")
-    //             : ResponseService::internalErr("Update category unsuccessful. Something went wrong from our side.");
-    //     } catch (\Throwable $th) {
-    //         echo ResponseService::internalErr([
-    //             'message' => $th->getMessage(),
-    //         ]);
-    //     }
-    // }
+            echo $success ?
+                ResponseService::ok("Updated category of id `$id` successfully.")
+                : ResponseService::internalErr("Update category unsuccessful. Something went wrong from our side.");
+        } catch (\Throwable $th) {
+            echo ResponseService::internalErr([
+                'message' => $th->getMessage(),
+            ]);
+        }
+    }
 }

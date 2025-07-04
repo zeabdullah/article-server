@@ -42,10 +42,10 @@ $apis = [
         'controller' => 'CategoryController',
         'method' => 'createCategory'
     ],
-    // '/update_category' => [
-    //     'controller' => 'CategoryController',
-    //     'method' => 'updateCategory'
-    // ],
+    '/update_category' => [
+        'controller' => 'CategoryController',
+        'method' => 'updateCategory'
+    ],
     // '/delete_category' => [
     //     'controller' => 'CategoryController',
     //     'method' => 'deleteCategoryById'
