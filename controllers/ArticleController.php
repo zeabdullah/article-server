@@ -2,9 +2,8 @@
 
 require(__DIR__ . "/../models/Article.php");
 require(__DIR__ . "/../services/ArticleService.php");
-require(__DIR__ . "/../services/ResponseService.php");
 
-class ArticleController
+class ArticleController extends Controller
 {
     public function createArticle(object $json)
     {
@@ -14,9 +13,9 @@ class ArticleController
                 'author' => $json->author,
                 'description' => $json->description,
             ]);
-            echo ResponseService::created($article->toArray());
+            echo $this->createdResponse($article->toArray());
         } catch (\Throwable $th) {
-            echo ResponseService::internalErr([
+            echo $this->internalErrResponse([
                 'message' => $th->getMessage(),
             ]);
         }
@@ -26,20 +25,20 @@ class ArticleController
     {
         try {
             if (!isset($_GET['id']) || $_GET['id'] === '') {
-                echo ResponseService::badRequest("param `id` is required");
+                echo $this->badRequestResponse("param `id` is required");
                 return;
             }
 
             $id = (int) $_GET['id'];
             $article = Article::find($id);
             if (!isset($article)) {
-                echo ResponseService::notFound("Article of id `$id` not found");
+                echo $this->notFoundResponse("Article of id `$id` not found");
                 return;
             }
             $article = $article->toArray();
-            echo ResponseService::ok($article);
+            echo $this->okResponse($article);
         } catch (\Throwable $th) {
-            echo ResponseService::internalErr([
+            echo $this->internalErrResponse([
                 'message' => $th->getMessage(),
             ]);
         }
@@ -49,9 +48,9 @@ class ArticleController
         try {
             $articles = Article::all();
             $articles_array = ArticleService::articlesToArray($articles);
-            echo ResponseService::ok($articles_array);
+            echo $this->okResponse($articles_array);
         } catch (\Throwable $th) {
-            echo ResponseService::internalErr([
+            echo $this->internalErrResponse([
                 'message' => $th->getMessage(),
             ]);
         }
@@ -62,10 +61,10 @@ class ArticleController
         try {
             $success = Article::deleteAll();
             echo $success ?
-                ResponseService::ok("Deleted all articles successfully.")
-                : ResponseService::internalErr("Deleting articles unsuccessful. Something went wrong from our side.");
+                $this->okResponse("Deleted all articles successfully.")
+                : $this->internalErrResponse("Deleting articles unsuccessful. Something went wrong from our side.");
         } catch (\Throwable $th) {
-            echo ResponseService::badRequest([
+            echo $this->badRequestResponse([
                 'message' => $th->getMessage()
             ]);
         }
@@ -74,7 +73,7 @@ class ArticleController
     {
         try {
             if (!isset($_GET['id']) || $_GET['id'] === '') {
-                echo ResponseService::badRequest("param `id` is required");
+                echo $this->badRequestResponse("param `id` is required");
                 return;
             }
 
@@ -82,16 +81,16 @@ class ArticleController
             $article = Article::find($id);
 
             if (!isset($article)) {
-                echo ResponseService::notFound("Article of id `$id` not found");
+                echo $this->notFoundResponse("Article of id `$id` not found");
                 return;
             }
 
             $success = Article::deleteById($id);
             echo $success ?
-                ResponseService::ok("Deleted article of id `$id` successfully.")
-                : ResponseService::internalErr("Deleting article unsuccessful. Something went wrong from our side.");
+                $this->okResponse("Deleted article of id `$id` successfully.")
+                : $this->internalErrResponse("Deleting article unsuccessful. Something went wrong from our side.");
         } catch (\Throwable $th) {
-            echo ResponseService::internalErr([
+            echo $this->internalErrResponse([
                 'message' => $th->getMessage(),
             ]);
         }
@@ -101,7 +100,7 @@ class ArticleController
     {
         try {
             if (!isset($_GET["id"]) || $_GET['id'] === '') {
-                echo ResponseService::badRequest("param `id` is required");
+                echo $this->badRequestResponse("param `id` is required");
                 return;
             }
 
@@ -109,17 +108,17 @@ class ArticleController
             $article = Article::find($id);
 
             if (!isset($article)) {
-                echo ResponseService::notFound("Article of id `$id` not found");
+                echo $this->notFoundResponse("Article of id `$id` not found");
                 return;
             }
 
             $success = $article->update(get_object_vars($json));
 
             echo $success ?
-                ResponseService::ok("Updated article of id `$id` successfully.")
-                : ResponseService::internalErr("Update article unsuccessful. Something went wrong from our side.");
+                $this->okResponse("Updated article of id `$id` successfully.")
+                : $this->internalErrResponse("Update article unsuccessful. Something went wrong from our side.");
         } catch (\Throwable $th) {
-            echo ResponseService::internalErr([
+            echo $this->internalErrResponse([
                 'message' => $th->getMessage(),
             ]);
         }

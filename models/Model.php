@@ -23,14 +23,18 @@ abstract class Model
             static::$table,
             static::$primary_key
         );
+        $statement = $db->prepare($sql);
 
-        $query = $db->prepare($sql);
-        $query->bind_param("i", $id);
-        $query->execute();
+        $statement->bind_param("i", $id);
+        $statement->execute();
 
-        $data = $query->get_result()->fetch_assoc();
+        $result = $statement->get_result()->fetch_assoc();
 
-        return $data ? new static($data) : null;
+        foreach ($result as $row) {
+            var_dump($row);
+        }
+
+        return $result ? new static($result) : null;
     }
 
     public static function all()

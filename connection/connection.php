@@ -8,7 +8,7 @@ class Database
     private static $db_user = "root";
     private static $db_pass = null;
 
-    public static function getInstance()
+    public static function getInstance(): mysqli
     {
         if (!isset(self::$instance)) {
             self::$instance = new mysqli(self::$db_host, self::$db_user, self::$db_pass, self::$db_name);
