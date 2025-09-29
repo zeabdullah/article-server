@@ -1,7 +1,7 @@
 <?php
-
-require(__DIR__ . "/../models/Article.php");
-require(__DIR__ . "/../services/ArticleService.php");
+require_once(__DIR__ . "/../models/Article.php");
+require_once(__DIR__ . "/../services/ArticleService.php");
+require_once(__DIR__ . "/Controller.php");
 
 class ArticleController extends Controller
 {

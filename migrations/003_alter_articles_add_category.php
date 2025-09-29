@@ -1,5 +1,5 @@
 <?php
-require("../connection/connection.php");
+require_once(__DIR__ . "/../connection/connection.php");
 
 $sql1 = "ALTER TABLE articles
     ADD category_id INT(11) NOT NULL";
@@ -13,4 +13,4 @@ $db = Database::getInstance();
 $db->prepare($sql1)->execute();
 $db->prepare($sql2)->execute();
 
-echo 'migration 004 done!';
+echo 'migration 003 done!' . PHP_EOL;

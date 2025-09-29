@@ -5,6 +5,11 @@ require_once(__DIR__ . '/../helpers/helpers.php');
 //It's an key-value array where the value is an key-value array
 //----------------------------------------------------------
 $apis = [
+    '/_run_migrations' => [
+        'controller' => 'AdminController',
+        'method' => 'runMigrations'
+    ],
+
     '/create_article' => [
         'controller' => 'ArticleController',
         'method' => 'createArticle'
