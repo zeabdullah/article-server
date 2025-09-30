@@ -30,10 +30,6 @@ abstract class Model
 
         $result = $statement->get_result()->fetch_assoc();
 
-        foreach ($result as $row) {
-            var_dump($row);
-        }
-
         return $result ? new static($result) : null;
     }
 
